@@ -45,7 +45,7 @@ const WebsiteCard = ({ website, onEditClick, onPlayVideo }) => {
       viewport={{ once: true, margin: "-50px" }}
       transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
       whileHover={{ y: -4 }}
-      className={`bg-[#1e1e1e] p-3 rounded-[1rem] shadow-lg transition-all duration-300 flex flex-col group border border-transparent hover:border-[#333] h-full relative ${isDeleting ? 'opacity-50 pointer-events-none' : ''}`}
+      className={`bg-white/5 backdrop-blur-md p-3 rounded-[1rem] shadow-[0_4px_30px_rgba(0,0,0,0.1)] transition-all duration-300 flex flex-col group border border-white/10 hover:border-primary/50 hover:shadow-[0_0_20px_rgba(219,84,0,0.2)] h-full relative ${isDeleting ? 'opacity-50 pointer-events-none' : ''}`}
     >
 
       {/* Image Container */}
@@ -98,12 +98,12 @@ const WebsiteCard = ({ website, onEditClick, onPlayVideo }) => {
             <h3 className="text-lg md:text-xl font-bold text-gray-100 leading-snug">
               {website.companyName}
             </h3>
-            <p className="text-xs md:text-sm font-medium tracking-wide mt-0.5" style={{ color: '#ff9c9c' }}>
+            <p className="text-xs md:text-sm font-medium tracking-wide mt-0.5" style={{ color: '#3a542d' }}>
               {website.websiteName}
             </p>
           </div>
         ) : (
-          <h3 className="text-base md:text-lg font-medium leading-snug mb-2" style={{ color: '#ff9c9c' }}>
+          <h3 className="text-base md:text-lg font-medium leading-snug mb-2" style={{ color: '#3a542d' }}>
             {website.websiteName}
           </h3>
         )}

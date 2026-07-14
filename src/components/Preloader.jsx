@@ -35,47 +35,27 @@ const Preloader = ({ onComplete }) => {
         isFadingOut ? 'opacity-0 pointer-events-none translate-y-[-20px]' : 'opacity-100'
       }`}
     >
-      <div className="relative flex flex-col items-center justify-center">
-        {/* Animated geometric rings */}
-        <div className="relative w-32 h-32 mb-12 flex items-center justify-center">
-          {/* Outer ring */}
-          <div className="absolute inset-0 rounded-full border border-primary/20 animate-[spin_4s_linear_infinite]"></div>
-          {/* Middle ring with solid border piece */}
-          <div className="absolute inset-2 rounded-full border border-transparent border-t-primary border-r-primary animate-[spin_3s_ease-in-out_infinite_alternate]"></div>
-          {/* Inner ring */}
-          <div className="absolute inset-6 rounded-full border border-transparent border-b-primary/60 border-l-primary/60 animate-[spin_2s_linear_infinite_reverse]"></div>
-          
-          {/* Center glow */}
-          <div className="absolute inset-0 rounded-full gold-glow animate-pulse opacity-50"></div>
-          
-          {/* Percentage */}
-          <div className="absolute inset-0 flex items-center justify-center z-10">
-            <span className="text-xl font-serif text-textPrimary tracking-wider">
-              {progress}<span className="text-sm text-primary ml-1">%</span>
-            </span>
-          </div>
+      <div className="relative flex flex-col items-center justify-center gap-6">
+        
+        {/* Animated Wave Bars */}
+        <div className="flex items-center gap-2 h-16">
+          <div className="w-3 h-full bg-primary rounded-full animate-[wave_1.2s_ease-in-out_infinite]"></div>
+          <div className="w-3 h-full bg-primary rounded-full animate-[wave_1.2s_ease-in-out_0.2s_infinite]"></div>
+          <div className="w-3 h-full bg-primary rounded-full animate-[wave_1.2s_ease-in-out_0.4s_infinite]"></div>
+          <div className="w-3 h-full bg-primary rounded-full animate-[wave_1.2s_ease-in-out_0.6s_infinite]"></div>
+          <div className="w-3 h-full bg-primary rounded-full animate-[wave_1.2s_ease-in-out_0.8s_infinite]"></div>
         </div>
         
         {/* Brand Text */}
-        <div className="overflow-hidden">
-          <h2 className="text-sm md:text-base font-sans tracking-[0.3em] text-textSecondary uppercase font-medium">
-            Loading<span className="animate-pulse">...</span>
+        <div className="mt-4 text-center">
+          <h2 className="text-xl md:text-2xl font-sans tracking-widest text-textPrimary font-bold">
+            INITIALIZING
           </h2>
+          <p className="text-sm text-primary font-mono mt-2 tracking-widest">
+            {progress}%
+          </p>
         </div>
         
-        {/* Progress Bar Container */}
-        <div className="w-64 h-[2px] bg-border mt-8 relative overflow-hidden rounded-full">
-          {/* Progress fill */}
-          <div 
-            className="absolute top-0 left-0 h-full bg-primary transition-all duration-300 ease-out"
-            style={{ width: `${progress}%` }}
-          />
-          {/* Glow effect on the tip of the progress bar */}
-          <div 
-            className="absolute top-0 h-full w-4 bg-white/50 blur-[2px] transition-all duration-300 ease-out"
-            style={{ left: `calc(${progress}% - 8px)` }}
-          />
-        </div>
       </div>
     </div>
   );

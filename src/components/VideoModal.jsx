@@ -3,6 +3,24 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { FiX } from 'react-icons/fi';
 
 const VideoModal = ({ isOpen, onClose, videoUrl }) => {
+  const isGoogleDrive = videoUrl?.includes('drive.google.com');
+  let embedUrl = videoUrl;
+  
+  if (isGoogleDrive) {
+    if (videoUrl.includes('/view')) {
+      embedUrl = videoUrl.split('/view')[0] + '/preview?autoplay=1';
+    } else if (!videoUrl.includes('/preview')) {
+      // Improved regex to capture the ID without needing a trailing slash
+      const match = videoUrl.match(/\/d\/([a-zA-Z0-9_-]+)/);
+      if (match && match[1]) {
+        embedUrl = `https://drive.google.com/file/d/${match[1]}/preview?autoplay=1`;
+      } else {
+        embedUrl = videoUrl.includes('?') ? `${videoUrl}&autoplay=1` : `${videoUrl}?autoplay=1`; 
+      }
+    } else {
+      embedUrl = videoUrl.includes('?') ? `${videoUrl}&autoplay=1` : `${videoUrl}?autoplay=1`;
+    }
+  }
   // Prevent scrolling when modal is open
   useEffect(() => {
     if (isOpen) {
@@ -34,13 +52,13 @@ const VideoModal = ({ isOpen, onClose, videoUrl }) => {
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
             transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-            className="relative w-[90%] max-w-7xl bg-card border border-border/50 rounded-2xl overflow-hidden shadow-2xl flex flex-col"
+            className="relative w-[90%] max-w-7xl h-[90vh] bg-white border border-gray-200/50 rounded-2xl overflow-hidden shadow-2xl flex flex-col"
           >
             {/* Header */}
-            <div className="flex justify-end items-center p-4 bg-background border-b border-border/50">
+            <div className="flex justify-end items-center p-4 bg-white border-b border-gray-200">
               <button
                 onClick={onClose}
-                className="p-2 bg-white/5 hover:bg-white/10 text-white rounded-full transition-colors group"
+                className="p-2 bg-white/5 hover:bg-white/10 text-gray-900 rounded-full transition-colors group"
                 title="Close"
               >
                 <FiX size={20} className="group-hover:text-primary transition-colors" />
@@ -48,16 +66,26 @@ const VideoModal = ({ isOpen, onClose, videoUrl }) => {
             </div>
 
             {/* Video Container */}
-            <div className="relative aspect-video w-full bg-black">
+            <div className="relative flex-1 w-full bg-black">
               {videoUrl ? (
-                <video
-                  src={videoUrl}
-                  controls
-                  autoPlay
-                  className="w-full h-full object-contain"
-                >
-                  Your browser does not support the video tag.
-                </video>
+                isGoogleDrive ? (
+                  <iframe
+                    src={embedUrl}
+                    className="w-full h-full border-0"
+                    allow="autoplay; fullscreen"
+                    allowFullScreen
+                    title="Google Drive Video"
+                  />
+                ) : (
+                  <video
+                    src={videoUrl}
+                    controls
+                    autoPlay
+                    className="w-full h-full object-contain"
+                  >
+                    Your browser does not support the video tag.
+                  </video>
+                )
               ) : (
                 <div className="flex items-center justify-center w-full h-full text-textSecondary">
                   No video URL provided

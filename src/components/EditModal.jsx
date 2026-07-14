@@ -19,6 +19,8 @@ const EditModal = ({ isOpen, onClose, website }) => {
   const [catOpen, setCatOpen]     = useState(false);
   const [saving, setSaving]       = useState(false);
   const [saveError, setSaveError] = useState('');
+  const [videoSourceType, setVideoSourceType] = useState('gdrive'); // 'gdrive' or 'direct'
+  const [videoFile, setVideoFile] = useState(null);
 
   useEffect(() => {
     if (website && isOpen) {
@@ -27,6 +29,13 @@ const EditModal = ({ isOpen, onClose, website }) => {
       setPreview(website.imageUrl || '');
       setImageFile(null);
       setSaveError('');
+      // If we already have a websiteUrl and it's not a google drive link, maybe it's direct?
+      if (website.websiteUrl && !website.websiteUrl.includes('drive.google.com')) {
+        setVideoSourceType('direct');
+      } else {
+        setVideoSourceType('gdrive');
+      }
+      setVideoFile(null);
     }
   }, [website, isOpen]);
 
@@ -91,13 +100,13 @@ const EditModal = ({ isOpen, onClose, website }) => {
           initial={{ opacity: 0, scale: 0.95, y: 20 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.95, y: 20 }}
-          className="relative bg-card border border-border rounded-xl shadow-2xl w-[90%] max-w-2xl max-h-[90vh] overflow-hidden flex flex-col"
+          className="relative bg-white border border-gray-200 rounded-xl shadow-2xl w-[90%] max-w-2xl max-h-[90vh] overflow-hidden flex flex-col"
         >
           <div className="absolute inset-0 bg-mesh-pattern opacity-10 pointer-events-none"></div>
 
           {/* Header */}
-          <div className="relative z-10 flex justify-between items-center p-6 border-b border-border bg-background/80 backdrop-blur">
-            <h3 className="text-xl font-serif font-bold text-textPrimary tracking-tight">
+          <div className="relative z-10 flex justify-between items-center p-6 border-b border-border bg-white/90 backdrop-blur">
+            <h3 className="text-xl font-serif font-bold text-gray-900 tracking-tight">
               Edit: <span className="text-primary font-mono font-normal">{website?.websiteName}</span>
             </h3>
             <button onClick={onClose} className="text-textSecondary hover:text-danger transition-colors"><FiX size={24} /></button>
@@ -111,17 +120,17 @@ const EditModal = ({ isOpen, onClose, website }) => {
             <form id="edit-form" onSubmit={handleSubmit} className="space-y-5">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
 
-                {/* Website Name */}
+                {/* Project Name */}
                 <div>
-                  <label className="block text-sm tracking-widest capitalize font-bold text-white mb-1">Website Name</label>
+                  <label className="block text-sm tracking-widest capitalize font-bold text-gray-900 mb-1">Project Name</label>
                   <input name="websiteName" value={formData.websiteName || ''} onChange={handleChange}
-                    className="w-full px-3 py-2 bg-background border border-border rounded-md text-textPrimary focus:ring-1 focus:ring-primary focus:outline-none"
+                    className="w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded-md text-gray-900 focus:ring-1 focus:ring-primary focus:outline-none"
                     required />
                 </div>
 
                 {/* Category */}
                 <div className="relative">
-                  <label className="block text-sm tracking-widest capitalize font-bold text-white mb-1">Category</label>
+                  <label className="block text-sm tracking-widest capitalize font-bold text-gray-900 mb-1">Category</label>
                   <input type="text" value={catSearch}
                     onChange={e => { 
                       setCatSearch(e.target.value); 
@@ -131,12 +140,12 @@ const EditModal = ({ isOpen, onClose, website }) => {
                     onFocus={() => setCatOpen(true)}
                     onBlur={() => setTimeout(() => setCatOpen(false), 150)}
                     placeholder="Search or select category..."
-                    className="w-full px-3 py-2 bg-background border border-border rounded-md text-textPrimary focus:ring-1 focus:ring-primary focus:outline-none" />
+                    className="w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded-md text-gray-900 focus:ring-1 focus:ring-primary focus:outline-none" />
                   {catOpen && filteredCats.length > 0 && (
-                    <div className="absolute z-50 w-full mt-1 bg-[#1a1a1a] border border-border rounded-md shadow-xl max-h-48 overflow-y-auto">
+                    <div className="absolute z-50 w-full mt-1 bg-white border border-border rounded-md shadow-xl max-h-48 overflow-y-auto">
                       {filteredCats.map(cat => (
                         <button key={cat} type="button" onMouseDown={() => selectCategory(cat)}
-                          className="w-full text-left px-3 py-2 text-sm text-textPrimary hover:bg-primary/10 hover:text-primary transition-colors">
+                          className="w-full text-left px-3 py-2 text-sm text-gray-900 hover:bg-primary/10 hover:text-primary transition-colors">
                           {cat}
                         </button>
                       ))}
@@ -144,62 +153,83 @@ const EditModal = ({ isOpen, onClose, website }) => {
                   )}
                 </div>
 
-                {/* Live URL */}
-                <div className="md:col-span-2">
-                  <label className="block text-sm tracking-widest capitalize font-bold text-white mb-1">Live Demo URL</label>
-                  <input name="websiteUrl" value={formData.websiteUrl || ''} onChange={handleChange}
-                    className="w-full px-3 py-2 bg-background border border-border rounded-md text-textPrimary focus:ring-1 focus:ring-primary focus:outline-none"
-                    required />
+                {/* Video Upload Section */}
+                <div className="md:col-span-2 border border-border rounded-md p-4 bg-gray-50">
+                  <label className="block text-sm tracking-widest uppercase font-bold text-primary mb-3">Video Source</label>
+                  <div className="flex gap-6 mb-4">
+                    {['gdrive', 'direct'].map(type => (
+                      <label key={type} className="flex items-center gap-2 cursor-pointer group">
+                        <input type="radio" name="videoSourceType" value={type}
+                          checked={videoSourceType === type} onChange={(e) => setVideoSourceType(e.target.value)}
+                          className="accent-primary w-4 h-4" />
+                        <span className={`text-sm font-semibold tracking-wide transition-colors ${videoSourceType === type ? 'text-primary' : 'text-textSecondary group-hover:text-gray-900'}`}>
+                          {type === 'gdrive' ? 'Google Drive Link' : 'Direct Upload'}
+                        </span>
+                      </label>
+                    ))}
+                  </div>
+
+                  {videoSourceType === 'gdrive' ? (
+                    <div>
+                      <label className="block text-sm tracking-widest capitalize font-bold text-gray-900 mb-1">Google Drive Link</label>
+                      <input name="websiteUrl" value={formData.websiteUrl || ''} onChange={handleChange}
+                        placeholder="https://drive.google.com/file/d/.../view"
+                        className="w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded-md text-gray-900 placeholder-textSecondary focus:ring-1 focus:ring-primary focus:outline-none"
+                      />
+                    </div>
+                  ) : (
+                    <div>
+                      <label className="block text-sm tracking-widest capitalize font-bold text-gray-900 mb-1">Upload Video File</label>
+                      {formData.websiteUrl && !formData.websiteUrl.includes('drive.google.com') && (
+                        <p className="text-xs text-primary mb-2">Current video: {formData.websiteUrl.substring(0, 30)}...</p>
+                      )}
+                      <input type="file" accept="video/*" onChange={(e) => setVideoFile(e.target.files[0])}
+                        className="w-full px-3 py-1.5 bg-gray-50 border border-gray-300 rounded-md text-textSecondary focus:ring-1 focus:ring-primary focus:outline-none file:mr-3 file:py-1 file:px-2 file:rounded file:border-0 file:text-xs file:font-bold file:bg-primary/20 file:text-primary hover:file:bg-primary/30 cursor-pointer text-sm"
+                      />
+                    </div>
+                  )}
                 </div>
 
                 {/* Description */}
                 <div className="md:col-span-2">
-                  <label className="block text-sm tracking-widest capitalize font-bold text-white mb-1">Description</label>
+                  <label className="block text-sm tracking-widest capitalize font-bold text-gray-900 mb-1">Description</label>
                   <textarea name="description" value={formData.description || ''} onChange={handleChange} rows={3}
                     placeholder="Short 1–2 line description shown on the card..."
-                    className="w-full px-3 py-2 bg-background border border-border rounded-md text-textPrimary focus:ring-1 focus:ring-primary focus:outline-none resize-none" />
+                    className="w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded-md text-gray-900 focus:ring-1 focus:ring-primary focus:outline-none resize-none" />
                 </div>
               </div>
 
               {/* Project Type & Company Name Row */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-5 items-start">
                 <div>
-                  <label className="block text-sm tracking-widest uppercase font-bold text-white mb-3">Project Type</label>
+                  <label className="block text-sm tracking-widest uppercase font-bold text-gray-900 mb-3">Animation Type</label>
                   <div className="flex gap-6 mt-2">
-                    {['demo', 'active'].map(type => (
+                    {['2D', '3D'].map(type => (
                       <label key={type} className="flex items-center gap-2 cursor-pointer group">
                         <input type="radio" name="projectType" value={type}
                           checked={formData.projectType === type} onChange={handleChange}
                           className="accent-primary w-4 h-4" />
-                        <span className={`text-sm font-semibold capitalize tracking-wide transition-colors ${formData.projectType === type ? 'text-primary' : 'text-textSecondary group-hover:text-textPrimary'}`}>
-                          {type === 'demo' ? 'Demo Project' : 'Active Project'}
+                        <span className={`text-sm font-semibold capitalize tracking-wide transition-colors ${formData.projectType === type ? 'text-primary' : 'text-textSecondary group-hover:text-gray-900'}`}>
+                          {type} Animation
                         </span>
                       </label>
                     ))}
                   </div>
                 </div>
 
-                <AnimatePresence>
-                  {formData.projectType === 'active' && (
-                    <motion.div
-                      initial={{ opacity: 0, height: 0, overflow: 'hidden' }}
-                      animate={{ opacity: 1, height: 'auto', overflow: 'visible' }}
-                      exit={{ opacity: 0, height: 0, overflow: 'hidden' }}
-                    >
-                      <label className="block text-sm tracking-widest capitalize font-bold text-white mb-1">Company Name</label>
+                    <div className="w-full">
+                      <label className="block text-sm tracking-widest capitalize font-bold text-gray-900 mb-1">Company Name</label>
                       <input name="companyName" value={formData.companyName || ''} onChange={handleChange}
                         placeholder="Enter company name..."
-                        className="w-full px-3 py-2 bg-background border border-border rounded-md text-textPrimary placeholder-textSecondary focus:ring-1 focus:ring-primary focus:outline-none" />
-                    </motion.div>
-                  )}
-                </AnimatePresence>
+                        className="w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded-md text-gray-900 placeholder-textSecondary focus:ring-1 focus:ring-primary focus:outline-none" />
+                    </div>
               </div>
 
               {/* Image Upload */}
               <div className="pt-4 border-t border-border">
                 <h4 className="text-primary text-xs font-bold tracking-widest uppercase mb-3">Image</h4>
                 <input type="file" accept="image/*" onChange={handleImageUpload}
-                  className="w-full px-3 py-1.5 bg-background border border-border rounded-md text-textSecondary focus:ring-1 focus:ring-primary focus:outline-none file:mr-3 file:py-1 file:px-2 file:rounded file:border-0 file:text-xs file:font-bold file:bg-primary/20 file:text-primary hover:file:bg-primary/30 cursor-pointer text-xs" />
+                  className="w-full px-3 py-1.5 bg-gray-50 border border-gray-300 rounded-md text-textSecondary focus:ring-1 focus:ring-primary focus:outline-none file:mr-3 file:py-1 file:px-2 file:rounded file:border-0 file:text-xs file:font-bold file:bg-primary/20 file:text-primary hover:file:bg-primary/30 cursor-pointer text-xs" />
                 {preview && (
                   <img src={preview} alt="preview" className="mt-3 w-full h-32 object-cover rounded border border-border" />
                 )}
@@ -208,13 +238,13 @@ const EditModal = ({ isOpen, onClose, website }) => {
           </div>
 
           {/* Footer */}
-          <div className="relative z-10 p-6 border-t border-border bg-background/80 backdrop-blur flex justify-end space-x-3">
+          <div className="relative z-10 p-6 border-t border-border bg-white/90 backdrop-blur flex justify-end space-x-3">
             <button type="button" onClick={onClose}
               className="px-6 py-2 text-sm tracking-widest uppercase font-bold text-textSecondary hover:text-primary transition-colors">
               Cancel
             </button>
             <button type="submit" form="edit-form" disabled={saving}
-              className="flex items-center px-6 py-2 text-sm tracking-widest uppercase font-bold text-background bg-primary rounded-md hover:bg-primary-dark transition-colors shadow-[0_0_15px_rgba(197,160,89,0.3)] disabled:opacity-60 disabled:cursor-not-allowed">
+              className="flex items-center px-6 py-2 text-sm tracking-widest uppercase font-bold text-white bg-primary rounded-md hover:bg-primary-dark transition-colors shadow-[0_0_15px_rgba(219,84,0,0.4)] disabled:opacity-60 disabled:cursor-not-allowed">
               {saving ? <><FiLoader className="mr-2 animate-spin" /> Saving...</> : <><FiSave className="mr-2" /> Save Details</>}
             </button>
           </div>

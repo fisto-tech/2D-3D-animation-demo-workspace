@@ -18,10 +18,10 @@ const Navbar = () => {
   };
 
   const navLinks = [
-    { label: 'Website', icon: <FiGlobe />, active: true, href: null },
-    { label: 'IDC', icon: <FiMonitor />, active: false, href: 'https://fist-o.com' },
-    { label: '2D 3D Animation', icon: <FiLayers />, active: false, href: 'https://fist-o.com' },
-    { label: 'Applications', icon: <FiGrid />, active: false, href: 'https://fist-o.com' },
+    { label: 'Website', icon: <FiGlobe />, active: false, href: 'https://website-demo-workspace.vercel.app/' },
+    { label: 'IDC', icon: <FiMonitor />, active: false, href: 'https://fisto-idc-webpage.vercel.app/' },
+    { label: '2D 3D Animation', icon: <FiLayers />, active: true, href: 'https://2-d-3-d-animation-demo-workspace.vercel.app/' },
+    { label: 'Applications', icon: <FiGrid />, active: false, href: 'https://fisto-demo-applications.vercel.app/' },
   ];
 
   return (
@@ -71,8 +71,8 @@ const Navbar = () => {
                   }}
                   className={`flex items-center gap-2 px-4 py-2 rounded-full text-xs font-bold tracking-widest uppercase transition-all duration-300 ${
                     link.active
-                      ? 'text-primary bg-primary/10 border border-primary/30'
-                      : 'text-textSecondary hover:text-primary hover:bg-primary/5 border border-transparent'
+                      ? 'text-white bg-primary/40 border border-primary/50'
+                      : 'text-white/70 hover:text-white hover:bg-primary/20 border border-transparent'
                   }`}
                 >
                   <span className="text-lg">{link.icon}</span>
@@ -89,7 +89,7 @@ const Navbar = () => {
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={handleLogout}
-                className="flex items-center px-3 py-1.5 md:px-5 md:py-2 text-[10px] md:text-xs tracking-widest uppercase font-bold text-background bg-primary hover:bg-primary-dark rounded-full transition-colors shadow-sm shadow-primary/30"
+                className="flex items-center px-3 py-1.5 md:px-5 md:py-2 text-[10px] md:text-xs tracking-widest uppercase font-bold text-white bg-primary hover:bg-primary-dark rounded-full transition-colors shadow-sm shadow-primary/30"
               >
                 <FiLogOut className="mr-1 md:mr-2" />
                 Logout

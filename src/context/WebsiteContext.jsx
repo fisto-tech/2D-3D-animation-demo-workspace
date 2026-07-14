@@ -12,14 +12,25 @@ export const WebsiteProvider = ({ children }) => {
   const fetchWebsites = useCallback(async () => {
     try {
       setLoading(true);
-      const res  = await fetch(`${API_BASE}/get_websites.php`);
+      const res  = await fetch(`${API_BASE}/get_animations.php`);
       const json = await res.json();
       if (json.success) {
         // If DB is totally empty, seed it from initial data
         if (json.data.length === 0) {
           await seedDatabase();
         } else {
-          let finalData = json.data;
+          // Map DB columns to frontend expected properties
+          let finalData = json.data.map(row => ({
+            websiteId: row.id,
+            websiteName: row.project_name,
+            category: row.category,
+            websiteUrl: row.project_link,
+            projectType: row.animation_type,
+            imageUrl: row.thumbnail_image,
+            companyName: row.company_name,
+            description: row.description,
+            preview_video: row.preview_video
+          }));
           
           // In development mode, replace hashed Vite URLs from the DB 
           // with the original local module imports so images work on localhost
@@ -53,49 +64,25 @@ export const WebsiteProvider = ({ children }) => {
     }
   }, []);
 
-  const seedDatabase = async () => {
-    try {
-      const { initialWebsites } = await import('../data/websites.js');
-      // Insert from last to first so they show up in correct order since we order by created_at DESC
-      const reverseData = [...initialWebsites].reverse();
-      
-      for (const item of reverseData) {
-        const fd = new FormData();
-        fd.append('website_name', item.websiteName  || '');
-        fd.append('category',     item.category     || '');
-        fd.append('website_link', item.websiteUrl   || '');
-        fd.append('description',  item.description  || '');
-        fd.append('project_type', item.projectType  || 'demo');
-        fd.append('company_name', item.companyName  || '');
-        fd.append('image_path',   item.imageUrl     || ''); // Vite asset URL
-        
-        await fetch(`${API_BASE}/save_website.php`, { method: 'POST', body: fd });
-      }
-      
-      // Fetch again to get the populated data
-      const res2 = await fetch(`${API_BASE}/get_websites.php`);
-      const json2 = await res2.json();
-      if (json2.success) setWebsites(json2.data);
-    } catch (err) {
-      console.error('Error seeding DB:', err);
-    }
-  };
+
 
   useEffect(() => { fetchWebsites(); }, [fetchWebsites]);
 
   // ── Add ───────────────────────────────────────────────────────────────────
-  const addWebsite = async (data, imageFile) => {
+  const addWebsite = async (data, videoFile, imageFile) => {
     const fd = new FormData();
-    fd.append('website_name', data.websiteName  || '');
-    fd.append('category',     data.category     || '');
-    fd.append('website_link', data.websiteUrl   || '');
-    fd.append('description',  data.description  || '');
-    fd.append('project_type', data.projectType  || 'demo');
-    fd.append('company_name', data.companyName  || '');
-    if (imageFile) fd.append('image', imageFile);
+    fd.append('project_name',   data.websiteName  || data.projectName || '');
+    fd.append('category',       data.category     || '');
+    fd.append('project_link',   data.websiteUrl   || data.projectLink || '');
+    fd.append('description',    data.description  || '');
+    fd.append('animation_type', data.projectType  || data.animationType || '2D');
+    fd.append('company_name',   data.companyName  || '');
+    
+    if (videoFile) fd.append('preview_video', videoFile);
+    if (imageFile) fd.append('thumbnail_image', imageFile);
 
     try {
-      const res  = await fetch(`${API_BASE}/save_website.php`, { method: 'POST', body: fd });
+      const res  = await fetch(`${API_BASE}/save_animation.php`, { method: 'POST', body: fd });
       const json = await res.json();
       if (json.success) await fetchWebsites();
       return json;
@@ -105,21 +92,24 @@ export const WebsiteProvider = ({ children }) => {
   };
 
   // ── Edit ──────────────────────────────────────────────────────────────────
-  const editWebsite = async (data, imageFile) => {
+  const editWebsite = async (data, videoFile, imageFile) => {
     const fd = new FormData();
-    fd.append('id',             data.websiteId   || '');
-    fd.append('website_name',   data.websiteName || '');
-    fd.append('category',       data.category    || '');
-    fd.append('website_link',   data.websiteUrl  || '');
-    fd.append('description',    data.description || '');
-    fd.append('project_type',   data.projectType || 'demo');
-    fd.append('company_name',   data.companyName || '');
-    // Send the existing relative image path so the server keeps it if no new upload
-    fd.append('existing_image', data.imagePath   || '');
-    if (imageFile) fd.append('image', imageFile);
+    fd.append('id',             data.id || data.websiteId || '');
+    fd.append('project_name',   data.websiteName  || data.projectName || '');
+    fd.append('category',       data.category     || '');
+    fd.append('project_link',   data.websiteUrl   || data.projectLink || '');
+    fd.append('description',    data.description  || '');
+    fd.append('animation_type', data.projectType  || data.animationType || '2D');
+    fd.append('company_name',   data.companyName  || '');
+    
+    fd.append('existing_preview', data.preview_video || '');
+    fd.append('existing_thumbnail', data.thumbnail_image || data.imagePath || data.imageUrl || '');
+    
+    if (videoFile) fd.append('preview_video', videoFile);
+    if (imageFile) fd.append('thumbnail_image', imageFile);
 
     try {
-      const res  = await fetch(`${API_BASE}/update_website.php`, { method: 'POST', body: fd });
+      const res  = await fetch(`${API_BASE}/update_animation.php`, { method: 'POST', body: fd });
       const json = await res.json();
       if (json.success) await fetchWebsites();
       return json;
@@ -134,7 +124,7 @@ export const WebsiteProvider = ({ children }) => {
     fd.append('id', id);
 
     try {
-      const res  = await fetch(`${API_BASE}/delete_website.php`, { method: 'POST', body: fd });
+      const res  = await fetch(`${API_BASE}/delete_animation.php`, { method: 'POST', body: fd });
       const json = await res.json();
       if (json.success) await fetchWebsites();
       return json;

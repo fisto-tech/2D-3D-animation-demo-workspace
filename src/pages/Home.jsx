@@ -80,7 +80,7 @@ const Home = () => {
       <select
         value={sortBy}
         onChange={e => setSortBy(e.target.value)}
-        className="relative z-0 appearance-none w-full pl-4 pr-9 py-3 border border-border/50 rounded-full bg-card/50 backdrop-blur-xl text-textSecondary focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary text-base transition-all duration-300 cursor-pointer"
+        className="relative z-0 appearance-none w-full pl-4 pr-9 py-3 border border-border/50 rounded-full bg-card/50 backdrop-blur-xl text-white focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary text-base transition-all duration-300 cursor-pointer"
         style={{ background: 'rgba(30,30,30,0.8)' }}
       >
         <option value="None">Sort By: None</option>
@@ -88,7 +88,7 @@ const Home = () => {
         <option value="A to Z">A to Z</option>
       </select>
       <div className="absolute inset-y-0 right-3 flex items-center pointer-events-none z-10">
-        <FiChevronDown className="text-textSecondary" size={15} />
+        <FiChevronDown className="text-white/70" size={15} />
       </div>
     </div>
   );
@@ -102,15 +102,15 @@ const Home = () => {
     >
       <Hero />
 
-      <main id="marketplace-grid" className="flex-1 w-[95%] md:w-[85%] max-w-none mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
-
+      <main id="marketplace-grid" className="flex-1 w-full bg-[#0a0a0a]">
+        <div className="w-[95%] md:w-[85%] max-w-none mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
         {/* Header Row */}
         <div className="mb-8 md:mb-10">
           <div className="flex flex-col gap-5 md:flex-row md:items-center md:justify-between">
 
             {/* Title + Tabs */}
             <div className="flex items-center gap-3 flex-wrap">
-              <h2 className="text-3xl font-bold text-textPrimary tracking-tight">Websites</h2>
+              <h2 className="text-3xl font-bold text-textPrimary tracking-tight">Animations</h2>
               <div className="flex gap-2">
                 {[
                   { key: '2D', label: '2D Animation' },
@@ -122,7 +122,7 @@ const Home = () => {
                     onClick={() => setActiveTab(tab.key)}
                     className={`px-4 py-1.5 rounded-full text-[13px] font-bold tracking-widest uppercase transition-all duration-300 ${
                       activeTab === tab.key
-                        ? 'bg-primary text-background shadow-md shadow-primary/20'
+                        ? 'bg-primary text-white shadow-md shadow-primary/20'
                         : 'border border-border/50 text-textSecondary hover:border-primary/50 hover:text-primary'
                     }`}
                   >
@@ -150,7 +150,7 @@ const Home = () => {
                         id="demo-category-filter"
                         value={demoCategory}
                         onChange={e => setDemoCategory(e.target.value)}
-                        className="relative z-0 appearance-none w-full sm:w-auto min-w-[140px] pl-4 pr-8 py-2.5 border border-border/50 rounded-full bg-card/50 backdrop-blur-xl text-textSecondary focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary text-sm transition-all duration-300 cursor-pointer"
+                        className="relative z-0 appearance-none w-full sm:w-auto min-w-[140px] pl-4 pr-8 py-2.5 border border-border/50 rounded-full bg-card/50 backdrop-blur-xl text-white focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary text-sm transition-all duration-300 cursor-pointer"
                         style={{ background: 'rgba(30,30,30,0.8)' }}
                       >
                         <option value="">All Categories</option>
@@ -159,19 +159,19 @@ const Home = () => {
                         ))}
                       </select>
                       <div className="absolute inset-y-0 right-3 flex items-center pointer-events-none z-10">
-                        <FiChevronDown className="text-textSecondary" size={14} />
+                        <FiChevronDown className="text-white/70" size={14} />
                       </div>
                     </div>
                     
                     {/* Demo Search */}
                     <div className="relative w-full sm:w-auto sm:flex-1 min-w-[150px] max-w-sm">
                       <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none z-10">
-                        <FiSearch className="text-primary/70" size={17} />
+                        <FiSearch className="text-white/70" size={17} />
                       </div>
                       <input
                         id="demo-search-input"
                         type="text"
-                        className="relative z-0 block w-full pl-10 pr-9 py-2.5 border border-border/50 rounded-full bg-card/50 backdrop-blur-xl placeholder-textSecondary text-textPrimary focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary text-sm transition-all duration-300"
+                        className="relative z-0 block w-full pl-10 pr-9 py-2.5 border border-border/50 rounded-full bg-card/50 backdrop-blur-xl placeholder-white/50 text-white focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary text-sm transition-all duration-300"
                         placeholder="Search name..."
                         value={demoSearch}
                         onChange={e => setDemoSearch(e.target.value)}
@@ -179,7 +179,7 @@ const Home = () => {
                       {demoSearch && (
                         <button
                           id="demo-search-clear"
-                          className="absolute inset-y-0 right-0 pr-3 flex items-center text-textSecondary hover:text-primary transition-colors z-10"
+                          className="absolute inset-y-0 right-0 pr-3 flex items-center text-white/70 hover:text-white transition-colors z-10"
                           onClick={() => setDemoSearch('')}
                           title="Clear search"
                         >
@@ -192,7 +192,7 @@ const Home = () => {
                       <select
                         value={sortBy}
                         onChange={e => setSortBy(e.target.value)}
-                        className="relative z-0 appearance-none w-full sm:w-auto min-w-[130px] pl-4 pr-8 py-2.5 border border-border/50 rounded-full bg-card/50 backdrop-blur-xl text-textSecondary focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary text-sm transition-all duration-300 cursor-pointer"
+                        className="relative z-0 appearance-none w-full sm:w-auto min-w-[130px] pl-4 pr-8 py-2.5 border border-border/50 rounded-full bg-card/50 backdrop-blur-xl text-white focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary text-sm transition-all duration-300 cursor-pointer"
                         style={{ background: 'rgba(30,30,30,0.8)' }}
                       >
                         <option value="None">Sort By: None</option>
@@ -200,7 +200,7 @@ const Home = () => {
                         <option value="A to Z">A to Z</option>
                       </select>
                       <div className="absolute inset-y-0 right-3 flex items-center pointer-events-none z-10">
-                        <FiChevronDown className="text-textSecondary" size={14} />
+                        <FiChevronDown className="text-white/70" size={14} />
                       </div>
                     </div>
                   </motion.div>
@@ -219,7 +219,7 @@ const Home = () => {
                         id="active-category-filter"
                         value={activeCategory}
                         onChange={e => setActiveCategory(e.target.value)}
-                        className="relative z-0 appearance-none w-full sm:w-auto min-w-[140px] pl-4 pr-8 py-2.5 border border-border/50 rounded-full bg-card/50 backdrop-blur-xl text-textSecondary focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary text-sm transition-all duration-300 cursor-pointer"
+                        className="relative z-0 appearance-none w-full sm:w-auto min-w-[140px] pl-4 pr-8 py-2.5 border border-border/50 rounded-full bg-card/50 backdrop-blur-xl text-white focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary text-sm transition-all duration-300 cursor-pointer"
                         style={{ background: 'rgba(30,30,30,0.8)' }}
                       >
                         <option value="">All Categories</option>
@@ -228,19 +228,19 @@ const Home = () => {
                         ))}
                       </select>
                       <div className="absolute inset-y-0 right-3 flex items-center pointer-events-none z-10">
-                        <FiChevronDown className="text-textSecondary" size={14} />
+                        <FiChevronDown className="text-white/70" size={14} />
                       </div>
                     </div>
 
                     {/* Active Search */}
                     <div className="relative w-full sm:w-auto sm:flex-1 min-w-[150px] max-w-sm">
                       <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none z-10">
-                        <FiSearch className="text-primary/70" size={17} />
+                        <FiSearch className="text-white/70" size={17} />
                       </div>
                       <input
                         id="active-search-input"
                         type="text"
-                        className="relative z-0 block w-full pl-10 pr-9 py-2.5 border border-border/50 rounded-full bg-card/50 backdrop-blur-xl placeholder-textSecondary text-textPrimary focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary text-sm transition-all duration-300"
+                        className="relative z-0 block w-full pl-10 pr-9 py-2.5 border border-border/50 rounded-full bg-card/50 backdrop-blur-xl placeholder-white/50 text-white focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary text-sm transition-all duration-300"
                         placeholder="Search..."
                         value={activeSearch}
                         onChange={e => setActiveSearch(e.target.value)}
@@ -248,7 +248,7 @@ const Home = () => {
                       {activeSearch && (
                         <button
                           id="active-search-clear"
-                          className="absolute inset-y-0 right-0 pr-3 flex items-center text-textSecondary hover:text-primary transition-colors z-10"
+                          className="absolute inset-y-0 right-0 pr-3 flex items-center text-white/70 hover:text-white transition-colors z-10"
                           onClick={() => setActiveSearch('')}
                           title="Clear search"
                         >
@@ -261,7 +261,7 @@ const Home = () => {
                       <select
                         value={sortBy}
                         onChange={e => setSortBy(e.target.value)}
-                        className="relative z-0 appearance-none w-full sm:w-auto min-w-[130px] pl-4 pr-8 py-2.5 border border-border/50 rounded-full bg-card/50 backdrop-blur-xl text-textSecondary focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary text-sm transition-all duration-300 cursor-pointer"
+                        className="relative z-0 appearance-none w-full sm:w-auto min-w-[130px] pl-4 pr-8 py-2.5 border border-border/50 rounded-full bg-card/50 backdrop-blur-xl text-white focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary text-sm transition-all duration-300 cursor-pointer"
                         style={{ background: 'rgba(30,30,30,0.8)' }}
                       >
                         <option value="None">Sort By: None</option>
@@ -269,7 +269,7 @@ const Home = () => {
                         <option value="A to Z">A to Z</option>
                       </select>
                       <div className="absolute inset-y-0 right-3 flex items-center pointer-events-none z-10">
-                        <FiChevronDown className="text-textSecondary" size={14} />
+                        <FiChevronDown className="text-white/70" size={14} />
                       </div>
                     </div>
                   </motion.div>
@@ -283,7 +283,7 @@ const Home = () => {
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                   onClick={() => setIsAddModalOpen(true)}
-                  className="shrink-0 flex items-center justify-center gap-1.5 px-5 py-2.5 bg-primary hover:bg-primary-dark text-background text-xs font-bold tracking-widest uppercase rounded-full transition-colors shadow-[0_0_15px_rgba(197,160,89,0.25)] w-full sm:w-auto ml-auto md:ml-0"
+                  className="shrink-0 flex items-center justify-center gap-1.5 px-5 py-2.5 bg-primary hover:bg-primary-dark text-white text-xs font-bold tracking-widest uppercase rounded-full transition-colors shadow-[0_0_15px_rgba(197,160,89,0.25)] w-full sm:w-auto ml-auto md:ml-0"
                 >
                   <FiPlus size={14} />
                   Add
@@ -305,6 +305,7 @@ const Home = () => {
             }}
           />
         </AnimatePresence>
+        </div>
       </main>
 
       {/* Add Modal */}
