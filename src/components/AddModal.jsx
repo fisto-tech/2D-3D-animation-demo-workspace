@@ -74,7 +74,7 @@ const AddModal = ({ isOpen, onClose }) => {
     e.preventDefault();
     setSaving(true);
     setSaveError('');
-    const result = await addWebsite(formData, imageFile);
+    const result = await addWebsite(formData, videoFile, imageFile);
     setSaving(false);
     if (result.success) {
       onClose();
@@ -150,11 +150,37 @@ const AddModal = ({ isOpen, onClose }) => {
 
                 {/* Video Upload Section */}
                 <div className="md:col-span-2 border border-border rounded-md p-4 bg-gray-50">
-                  <label className="block text-sm tracking-widest capitalize font-bold text-gray-900 mb-1">Google Drive Link *</label>
-                  <input name="websiteUrl" value={formData.websiteUrl || ''} onChange={handleChange}
-                    placeholder="https://drive.google.com/file/d/.../view"
-                    className="w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded-md text-gray-900 placeholder-textSecondary focus:ring-1 focus:ring-primary focus:outline-none"
-                    required />
+                  <div className="flex justify-between items-center mb-3">
+                    <label className="block text-sm tracking-widest capitalize font-bold text-gray-900">Video Source *</label>
+                    <div className="flex gap-4">
+                      <label className="flex items-center gap-1.5 cursor-pointer text-xs">
+                        <input type="radio" name="videoSource" value="gdrive" 
+                          checked={videoSourceType === 'gdrive'} 
+                          onChange={() => setVideoSourceType('gdrive')} 
+                          className="accent-primary" />
+                        <span className={videoSourceType === 'gdrive' ? 'font-bold' : ''}>Google Drive Link</span>
+                      </label>
+                      <label className="flex items-center gap-1.5 cursor-pointer text-xs">
+                        <input type="radio" name="videoSource" value="direct" 
+                          checked={videoSourceType === 'direct'} 
+                          onChange={() => setVideoSourceType('direct')} 
+                          className="accent-primary" />
+                        <span className={videoSourceType === 'direct' ? 'font-bold' : ''}>Upload Video</span>
+                      </label>
+                    </div>
+                  </div>
+
+                  {videoSourceType === 'gdrive' ? (
+                    <input name="websiteUrl" value={formData.websiteUrl || ''} onChange={handleChange}
+                      placeholder="https://drive.google.com/file/d/.../view"
+                      className="w-full px-3 py-2 bg-white border border-gray-300 rounded-md text-gray-900 placeholder-textSecondary focus:ring-1 focus:ring-primary focus:outline-none"
+                      required={!videoFile} />
+                  ) : (
+                    <input type="file" accept="video/mp4,video/webm,video/ogg" 
+                      onChange={(e) => setVideoFile(e.target.files[0])}
+                      className="w-full px-3 py-1.5 bg-white border border-gray-300 rounded-md text-textSecondary focus:ring-1 focus:ring-primary focus:outline-none file:mr-3 file:py-1 file:px-2 file:rounded file:border-0 file:text-xs file:font-bold file:bg-primary/20 file:text-primary hover:file:bg-primary/30 cursor-pointer text-xs" 
+                      required={!formData.websiteUrl} />
+                  )}
                 </div>
 
                 {/* Description */}

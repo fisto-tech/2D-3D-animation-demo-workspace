@@ -56,9 +56,9 @@ const WebsiteCard = ({ website, onEditClick, onPlayVideo }) => {
             alt={website.websiteName}
             className="w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-110"
           />
-        ) : website.websiteUrl ? (
+        ) : website.preview_video ? (
           <video 
-            src={website.websiteUrl} 
+            src={website.preview_video} 
             preload="metadata"
             className="w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-110 pointer-events-none"
           />
@@ -73,8 +73,9 @@ const WebsiteCard = ({ website, onEditClick, onPlayVideo }) => {
           className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500 ease-in-out flex items-center justify-center cursor-pointer" 
           onClick={(e) => {
             e.stopPropagation();
-            if (website.websiteUrl && onPlayVideo) {
-              onPlayVideo(website.websiteUrl);
+            const videoToPlay = website.preview_video || website.websiteUrl;
+            if (videoToPlay && onPlayVideo) {
+              onPlayVideo(videoToPlay);
             }
           }}
         >

@@ -2,11 +2,14 @@
 
 $envFile = __DIR__ . '/../.env';
 $env = file_exists($envFile) ? parse_ini_file($envFile) : [];
-
-$host     = $env['DB_HOST'] ?? "";
-$dbname   = $env['DB_NAME'] ?? "";
-$username = $env['DB_USER'] ?? "";
-$password = $env['DB_PASS'] ?? "";
+// DB_HOST=fist-o.com
+// DB_NAME=fisto_demo_workspace
+// DB_USER=fisto_demo_workspace
+// DB_PASS=hFc3nsJVAx4MVDFr4mcH
+$host     = "fist-o.com";
+$dbname   = "fisto_demo_workspace";
+$username = "fisto_demo_workspace";
+$password = "hFc3nsJVAx4MVDFr4mcH";
 
 $conn = new mysqli($host, $username, $password, $dbname);
 

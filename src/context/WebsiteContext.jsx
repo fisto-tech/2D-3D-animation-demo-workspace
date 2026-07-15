@@ -20,17 +20,27 @@ export const WebsiteProvider = ({ children }) => {
           await seedDatabase();
         } else {
           // Map DB columns to frontend expected properties
-          let finalData = json.data.map(row => ({
-            websiteId: row.id,
-            websiteName: row.project_name,
-            category: row.category,
-            websiteUrl: row.project_link,
-            projectType: row.animation_type,
-            imageUrl: row.thumbnail_image,
-            companyName: row.company_name,
-            description: row.description,
-            preview_video: row.preview_video
-          }));
+          let finalData = json.data.map(row => {
+            const formatUrl = (path) => {
+              if (!path) return path;
+              if (path.startsWith('http') || path.startsWith('data:') || path.startsWith('/assets') || path.startsWith('/images')) {
+                return path;
+              }
+              return `${API_BASE}/${path}`;
+            };
+            
+            return {
+              websiteId: row.id,
+              websiteName: row.project_name,
+              category: row.category,
+              websiteUrl: row.project_link,
+              projectType: row.animation_type,
+              imageUrl: formatUrl(row.thumbnail_image),
+              companyName: row.company_name,
+              description: row.description,
+              preview_video: formatUrl(row.preview_video)
+            };
+          });
           
           // In development mode, replace hashed Vite URLs from the DB 
           // with the original local module imports so images work on localhost
