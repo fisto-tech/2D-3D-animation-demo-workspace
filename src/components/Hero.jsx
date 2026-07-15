@@ -14,7 +14,7 @@ const Hero = () => {
 
   return (
     <div 
-      className="relative bg-[#fff] overflow-hidden border-b border-border"
+      className="relative overflow-hidden border-b border-border"
       onMouseMove={handleMouseMove}
       style={{
         '--mouse-x': `${mousePos.x}%`,
@@ -32,14 +32,13 @@ const Hero = () => {
             transition={{ duration: 0.8, ease: "easeOut" }}
             className="flex flex-col items-center justify-center"
           >
-            <h1 className="text-4xl md:text-5xl lg:text-7xl font-sans font-bold text-gray-900 leading-tight mb-6">
-              Bringing Ideas to Life with <span className="text-primary block mt-2">2D & 3D Animation</span> 
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-sans font-bold text-white leading-tight mb-6 tracking-wide">
+              Bringing Ideas to Life with <span className="text-[#d6fd95] drop-shadow-md block mt-3 text-5xl md:text-6xl lg:text-8xl">2D & 3D Animation</span> 
             </h1>
 
-            <p className="text-base md:text-lg lg:text-xl text-gray-600 mb-10 max-w-2xl font-light leading-relaxed">
+            <p className="text-base md:text-lg lg:text-xl text-gray-200 mb-10 max-w-2xl font-light leading-relaxed">
               Immersive, high-quality animations that elevate your brand's digital presence
             </p>
-
 
           </motion.div>
 

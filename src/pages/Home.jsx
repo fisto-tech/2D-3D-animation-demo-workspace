@@ -203,6 +203,20 @@ const Home = () => {
                         <FiChevronDown className="text-white/70" size={14} />
                       </div>
                     </div>
+
+                    {/* + Add Button — admin only */}
+                    {isAdmin && (
+                      <motion.button
+                        id="add-website-btn"
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        onClick={() => setIsAddModalOpen(true)}
+                        className="shrink-0 flex items-center justify-center gap-1.5 px-5 py-2.5 bg-primary hover:bg-primary-dark text-white text-xs font-bold tracking-widest uppercase rounded-full transition-colors shadow-[0_0_15px_rgba(197,160,89,0.25)] w-full sm:w-auto"
+                      >
+                        <FiPlus size={14} />
+                        Add
+                      </motion.button>
+                    )}
                   </motion.div>
                 ) : (
                   <motion.div
@@ -272,23 +286,23 @@ const Home = () => {
                         <FiChevronDown className="text-white/70" size={14} />
                       </div>
                     </div>
+
+                    {/* + Add Button — admin only */}
+                    {isAdmin && (
+                      <motion.button
+                        id="add-website-btn"
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        onClick={() => setIsAddModalOpen(true)}
+                        className="shrink-0 flex items-center justify-center gap-1.5 px-5 py-2.5 bg-primary hover:bg-primary-dark text-white text-xs font-bold tracking-widest uppercase rounded-full transition-colors shadow-[0_0_15px_rgba(197,160,89,0.25)] w-full sm:w-auto"
+                      >
+                        <FiPlus size={14} />
+                        Add
+                      </motion.button>
+                    )}
                   </motion.div>
                 )}
               </AnimatePresence>
-
-              {/* + Add Button — admin only */}
-              {isAdmin && (
-                <motion.button
-                  id="add-website-btn"
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  onClick={() => setIsAddModalOpen(true)}
-                  className="shrink-0 flex items-center justify-center gap-1.5 px-5 py-2.5 bg-primary hover:bg-primary-dark text-white text-xs font-bold tracking-widest uppercase rounded-full transition-colors shadow-[0_0_15px_rgba(197,160,89,0.25)] w-full sm:w-auto ml-auto md:ml-0"
-                >
-                  <FiPlus size={14} />
-                  Add
-                </motion.button>
-              )}
             </div>
           </div>
         </div>

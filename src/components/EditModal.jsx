@@ -158,14 +158,14 @@ const EditModal = ({ isOpen, onClose, website }) => {
                   <div className="flex justify-between items-center mb-3">
                     <label className="block text-sm tracking-widest capitalize font-bold text-gray-900">Video Source</label>
                     <div className="flex gap-4">
-                      <label className="flex items-center gap-1.5 cursor-pointer text-xs">
+                      <label className="flex items-center gap-1.5 cursor-pointer text-xs text-gray-900">
                         <input type="radio" name="videoSource" value="gdrive" 
                           checked={videoSourceType === 'gdrive'} 
                           onChange={() => setVideoSourceType('gdrive')} 
                           className="accent-primary" />
                         <span className={videoSourceType === 'gdrive' ? 'font-bold' : ''}>Google Drive Link</span>
                       </label>
-                      <label className="flex items-center gap-1.5 cursor-pointer text-xs">
+                      <label className="flex items-center gap-1.5 cursor-pointer text-xs text-gray-900">
                         <input type="radio" name="videoSource" value="direct" 
                           checked={videoSourceType === 'direct'} 
                           onChange={() => setVideoSourceType('direct')} 

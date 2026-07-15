@@ -104,7 +104,7 @@ const WebsiteCard = ({ website, onEditClick, onPlayVideo }) => {
             </p>
           </div>
         ) : (
-          <h3 className="text-base md:text-lg font-medium leading-snug mb-2" style={{ color: '#3a542d' }}>
+          <h3 className="text-base md:text-lg font-medium leading-snug mb-2" style={{ color: '#b1df92' }}>
             {website.websiteName}
           </h3>
         )}
