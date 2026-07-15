@@ -150,37 +150,11 @@ const AddModal = ({ isOpen, onClose }) => {
 
                 {/* Video Upload Section */}
                 <div className="md:col-span-2 border border-border rounded-md p-4 bg-gray-50">
-                  <label className="block text-sm tracking-widest uppercase font-bold text-primary mb-3">Video Source *</label>
-                  <div className="flex gap-6 mb-4">
-                    {['gdrive', 'direct'].map(type => (
-                      <label key={type} className="flex items-center gap-2 cursor-pointer group">
-                        <input type="radio" name="videoSourceType" value={type}
-                          checked={videoSourceType === type} onChange={(e) => setVideoSourceType(e.target.value)}
-                          className="accent-primary w-4 h-4" />
-                        <span className={`text-sm font-semibold tracking-wide transition-colors ${videoSourceType === type ? 'text-primary' : 'text-textSecondary group-hover:text-gray-900'}`}>
-                          {type === 'gdrive' ? 'Google Drive Link' : 'Direct Upload'}
-                        </span>
-                      </label>
-                    ))}
-                  </div>
-
-                  {videoSourceType === 'gdrive' ? (
-                    <div>
-                      <label className="block text-sm tracking-widest capitalize font-bold text-gray-900 mb-1">Google Drive Link *</label>
-                      <input name="websiteUrl" value={formData.websiteUrl || ''} onChange={handleChange}
-                        placeholder="https://drive.google.com/file/d/.../view"
-                        className="w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded-md text-gray-900 placeholder-textSecondary focus:ring-1 focus:ring-primary focus:outline-none"
-                        required={videoSourceType === 'gdrive'} />
-                    </div>
-                  ) : (
-                    <div>
-                      <label className="block text-sm tracking-widest capitalize font-bold text-gray-900 mb-1">Upload Video File *</label>
-                      <input type="file" accept="video/*" onChange={(e) => setVideoFile(e.target.files[0])}
-                        className="w-full px-3 py-1.5 bg-gray-50 border border-gray-300 rounded-md text-textSecondary focus:ring-1 focus:ring-primary focus:outline-none file:mr-3 file:py-1 file:px-2 file:rounded file:border-0 file:text-xs file:font-bold file:bg-primary/20 file:text-primary hover:file:bg-primary/30 cursor-pointer text-sm"
-                        required={videoSourceType === 'direct'} />
-                      <p className="text-xs text-textSecondary mt-2">Uploading large video files may take some time depending on your connection speed.</p>
-                    </div>
-                  )}
+                  <label className="block text-sm tracking-widest capitalize font-bold text-gray-900 mb-1">Google Drive Link *</label>
+                  <input name="websiteUrl" value={formData.websiteUrl || ''} onChange={handleChange}
+                    placeholder="https://drive.google.com/file/d/.../view"
+                    className="w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded-md text-gray-900 placeholder-textSecondary focus:ring-1 focus:ring-primary focus:outline-none"
+                    required />
                 </div>
 
                 {/* Description */}
