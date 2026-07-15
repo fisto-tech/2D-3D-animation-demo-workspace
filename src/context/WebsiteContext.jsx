@@ -22,22 +22,24 @@ export const WebsiteProvider = ({ children }) => {
           // Map DB columns to frontend expected properties
           let finalData = json.data.map(row => {
             const formatUrl = (path) => {
-              if (!path) return path;
+              if (!path || path.trim() === '') return '';
               if (path.startsWith('http') || path.startsWith('data:') || path.startsWith('/assets') || path.startsWith('/images')) {
-                return path;
+                return path.trim();
               }
-              return `${API_BASE}/${path}`;
+              return `${API_BASE}/${path.trim()}`;
             };
+            
+            const cleanStr = (str) => (!str || str.trim() === '') ? '' : str.trim();
             
             return {
               websiteId: row.id,
-              websiteName: row.project_name,
-              category: row.category,
-              websiteUrl: row.project_link,
-              projectType: row.animation_type,
+              websiteName: cleanStr(row.project_name),
+              category: cleanStr(row.category),
+              websiteUrl: cleanStr(row.project_link),
+              projectType: cleanStr(row.animation_type),
               imageUrl: formatUrl(row.thumbnail_image),
-              companyName: row.company_name,
-              description: row.description,
+              companyName: cleanStr(row.company_name),
+              description: cleanStr(row.description),
               preview_video: formatUrl(row.preview_video)
             };
           });
@@ -107,12 +109,12 @@ export const WebsiteProvider = ({ children }) => {
     fd.append('id',             data.id || data.websiteId || '');
     fd.append('project_name',   data.websiteName  || data.projectName || '');
     fd.append('category',       data.category     || '');
-    fd.append('project_link',   data.websiteUrl   || data.projectLink || '');
+    fd.append('project_link',   data.websiteUrl !== undefined ? data.websiteUrl : (data.projectLink || ''));
     fd.append('description',    data.description  || '');
     fd.append('animation_type', data.projectType  || data.animationType || '2D');
     fd.append('company_name',   data.companyName  || '');
     
-    fd.append('existing_preview', data.preview_video || '');
+    fd.append('existing_preview', data.preview_video !== undefined ? data.preview_video : '');
     fd.append('existing_thumbnail', data.thumbnail_image || data.imagePath || data.imageUrl || '');
     
     if (videoFile) fd.append('preview_video', videoFile);

@@ -110,11 +110,11 @@ const Home = () => {
 
             {/* Title + Tabs */}
             <div className="flex items-center gap-3 flex-wrap">
-              <h2 className="text-3xl font-bold text-textPrimary tracking-tight">Animations</h2>
+
               <div className="flex gap-2">
                 {[
-                  { key: '2D', label: '2D Animation' },
-                  { key: '3D', label: '3D Animation' }
+                  { key: '2D', label: `2D Animation (${filteredDemoWebsites.length})` },
+                  { key: '3D', label: `3D Animation (${filteredActiveWebsites.length})` }
                 ].map(tab => (
                   <motion.button
                     key={tab.key}
@@ -326,6 +326,7 @@ const Home = () => {
       <AddModal
         isOpen={isAddModalOpen}
         onClose={() => setIsAddModalOpen(false)}
+        defaultType={activeTab}
       />
 
       {/* Video Modal */}

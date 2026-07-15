@@ -14,7 +14,7 @@ const EMPTY = {
   websiteUrl: '', projectType: '2D', companyName: '',
 };
 
-const AddModal = ({ isOpen, onClose }) => {
+const AddModal = ({ isOpen, onClose, defaultType = '2D' }) => {
   const { addWebsite } = useContext(WebsiteContext);
 
   const [formData, setFormData]   = useState(EMPTY);
@@ -30,7 +30,7 @@ const AddModal = ({ isOpen, onClose }) => {
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = 'hidden';
-      setFormData(EMPTY);
+      setFormData({ ...EMPTY, projectType: defaultType });
       setImageFile(null);
       setPreview('');
       setCatSearch('');
@@ -176,10 +176,23 @@ const AddModal = ({ isOpen, onClose }) => {
                       className="w-full px-3 py-2 bg-white border border-gray-300 rounded-md text-gray-900 placeholder-textSecondary focus:ring-1 focus:ring-primary focus:outline-none"
                       required={!videoFile} />
                   ) : (
-                    <input type="file" accept="video/mp4,video/webm,video/ogg" 
-                      onChange={(e) => setVideoFile(e.target.files[0])}
-                      className="w-full px-3 py-1.5 bg-white border border-gray-300 rounded-md text-textSecondary focus:ring-1 focus:ring-primary focus:outline-none file:mr-3 file:py-1 file:px-2 file:rounded file:border-0 file:text-xs file:font-bold file:bg-primary/20 file:text-primary hover:file:bg-primary/30 cursor-pointer text-xs" 
-                      required={!formData.websiteUrl} />
+                    videoFile ? (
+                      <div className="flex w-full">
+                        <div className="flex-1 px-3 py-1.5 bg-primary/10 border border-primary/30 rounded-md flex items-center justify-between min-w-0">
+                          <span className="text-primary text-xs font-bold truncate pr-2" title={videoFile.name}>
+                            {videoFile.name}
+                          </span>
+                          <button type="button" onClick={() => setVideoFile(null)} className="text-primary hover:text-danger transition-colors shrink-0">
+                            <FiX size={16} />
+                          </button>
+                        </div>
+                      </div>
+                    ) : (
+                      <input type="file" accept="video/mp4,video/webm,video/ogg" 
+                        onChange={(e) => setVideoFile(e.target.files[0])}
+                        className="w-full px-3 py-1.5 bg-white border border-gray-300 rounded-md text-textSecondary focus:ring-1 focus:ring-primary focus:outline-none file:mr-3 file:py-1 file:px-2 file:rounded file:border-0 file:text-xs file:font-bold file:bg-primary/20 file:text-primary hover:file:bg-primary/30 cursor-pointer text-xs" 
+                        required={!formData.websiteUrl} />
+                    )
                   )}
                 </div>
 

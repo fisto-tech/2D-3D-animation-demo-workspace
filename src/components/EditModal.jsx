@@ -21,21 +21,36 @@ const EditModal = ({ isOpen, onClose, website }) => {
   const [saveError, setSaveError] = useState('');
   const [videoSourceType, setVideoSourceType] = useState('gdrive'); // 'gdrive' or 'direct'
   const [videoFile, setVideoFile] = useState(null);
+  const [replaceVideo, setReplaceVideo] = useState(false);
 
   useEffect(() => {
     if (website && isOpen) {
-      setFormData(website);
+      let type = website.projectType;
+      if (type === 'demo') type = '2D';
+      if (type === 'active') type = '3D';
+
+      setFormData({ ...website, projectType: type || '2D' });
       setCatSearch(website.category || '');
       setPreview(website.imageUrl || '');
       setImageFile(null);
       setSaveError('');
-      // If we already have a websiteUrl and it's not a google drive link, maybe it's direct?
-      if (website.websiteUrl && !website.websiteUrl.includes('drive.google.com')) {
+      
+      // Check if they uploaded a direct video or are using a gdrive link
+      // A typical gdrive link has drive.google.com in it
+      const hasDriveLink = website.websiteUrl && website.websiteUrl.includes('drive.google.com');
+      const hasDirectVideo = !!website.preview_video;
+
+      if (hasDirectVideo) {
+        // If there's a direct video uploaded, prioritize it just like WebsiteCard does
         setVideoSourceType('direct');
+      } else if (hasDriveLink) {
+        setVideoSourceType('gdrive');
       } else {
         setVideoSourceType('gdrive');
       }
+
       setVideoFile(null);
+      setReplaceVideo(false);
     }
   }, [website, isOpen]);
 
@@ -79,7 +94,15 @@ const EditModal = ({ isOpen, onClose, website }) => {
     e.preventDefault();
     setSaving(true);
     setSaveError('');
-    const result = await editWebsite(formData, videoFile, imageFile);
+    
+    let submitData = { ...formData };
+    if (videoSourceType === 'direct') {
+      submitData.websiteUrl = ' '; // send space to force backend to overwrite
+    } else {
+      submitData.preview_video = ' '; // send space to force backend to overwrite
+    }
+    
+    const result = await editWebsite(submitData, videoFile, imageFile);
     setSaving(false);
     if (result.success) {
       onClose();
@@ -181,10 +204,64 @@ const EditModal = ({ isOpen, onClose, website }) => {
                       className="w-full px-3 py-2 bg-white border border-gray-300 rounded-md text-gray-900 placeholder-textSecondary focus:ring-1 focus:ring-primary focus:outline-none"
                     />
                   ) : (
-                    <input type="file" accept="video/mp4,video/webm,video/ogg" 
-                      onChange={(e) => setVideoFile(e.target.files[0])}
-                      className="w-full px-3 py-1.5 bg-white border border-gray-300 rounded-md text-textSecondary focus:ring-1 focus:ring-primary focus:outline-none file:mr-3 file:py-1 file:px-2 file:rounded file:border-0 file:text-xs file:font-bold file:bg-primary/20 file:text-primary hover:file:bg-primary/30 cursor-pointer text-xs" 
-                    />
+                    <div>
+                      {website?.preview_video && !replaceVideo ? (
+                        <div className="flex gap-2">
+                          <input 
+                            type="text" 
+                            disabled 
+                            value={website.preview_video.split('?')[0].split('/').pop()} 
+                            className="w-full px-3 py-1.5 bg-gray-100 border border-gray-300 rounded-md text-gray-500 text-xs cursor-not-allowed font-medium" 
+                            title={website.preview_video.split('?')[0].split('/').pop()}
+                          />
+                          <button 
+                            type="button" 
+                            onClick={() => setReplaceVideo(true)} 
+                            className="shrink-0 px-4 py-1.5 bg-primary/10 text-primary rounded text-xs font-bold hover:bg-primary/20 transition-colors"
+                          >
+                            Change File
+                          </button>
+                        </div>
+                      ) : (
+                        videoFile ? (
+                          <div className="flex gap-2 w-full">
+                            <div className="flex-1 px-3 py-1.5 bg-primary/10 border border-primary/30 rounded-md flex items-center justify-between min-w-0">
+                              <span className="text-primary text-xs font-bold truncate pr-2" title={videoFile.name}>
+                                {videoFile.name}
+                              </span>
+                              <button type="button" onClick={() => setVideoFile(null)} className="text-primary hover:text-danger transition-colors shrink-0">
+                                <FiX size={16} />
+                              </button>
+                            </div>
+                            {website?.preview_video && (
+                              <button 
+                                type="button" 
+                                onClick={() => { setReplaceVideo(false); setVideoFile(null); }} 
+                                className="shrink-0 px-3 py-1.5 text-gray-500 hover:text-gray-700 text-xs font-medium"
+                              >
+                                Cancel
+                              </button>
+                            )}
+                          </div>
+                        ) : (
+                          <div className="flex gap-2 w-full">
+                            <input type="file" accept="video/mp4,video/webm,video/ogg" 
+                              onChange={(e) => setVideoFile(e.target.files[0])}
+                              className="w-full px-3 py-1.5 bg-white border border-gray-300 rounded-md text-textSecondary focus:ring-1 focus:ring-primary focus:outline-none file:mr-3 file:py-1 file:px-2 file:rounded file:border-0 file:text-xs file:font-bold file:bg-primary/20 file:text-primary hover:file:bg-primary/30 cursor-pointer text-xs" 
+                            />
+                            {website?.preview_video && (
+                              <button 
+                                type="button" 
+                                onClick={() => { setReplaceVideo(false); setVideoFile(null); }} 
+                                className="shrink-0 px-3 py-1.5 text-gray-500 hover:text-gray-700 text-xs font-medium"
+                              >
+                                Cancel
+                              </button>
+                            )}
+                          </div>
+                        )
+                      )}
+                    </div>
                   )}
                 </div>
 

@@ -69,13 +69,17 @@ const VideoModal = ({ isOpen, onClose, videoUrl }) => {
             <div className="relative flex-1 w-full bg-black">
               {videoUrl ? (
                 isGoogleDrive ? (
-                  <iframe
-                    src={embedUrl}
-                    className="w-full h-full border-0"
-                    allow="autoplay; fullscreen"
-                    allowFullScreen
-                    title="Google Drive Video"
-                  />
+                  <div className="relative w-full h-full">
+                    <iframe
+                      src={embedUrl}
+                      className="w-full h-full border-0"
+                      allow="autoplay; fullscreen"
+                      allowFullScreen
+                      title="Google Drive Video"
+                    />
+                    {/* Hack to hide Google Drive's native pop-out icon in the top right */}
+                    <div className="absolute top-0 right-0 w-[60px] h-[60px] bg-black z-10 pointer-events-none"></div>
+                  </div>
                 ) : (
                   <video
                     src={videoUrl}

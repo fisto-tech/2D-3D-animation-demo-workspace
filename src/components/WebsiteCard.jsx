@@ -94,14 +94,14 @@ const WebsiteCard = ({ website, onEditClick, onPlayVideo }) => {
 
       {/* Title + Description */}
       <div className="px-1 mb-5 flex-1">
-        {website.projectType === 'active' && website.companyName ? (
+        {website.companyName ? (
           <div className="mb-2">
-            <h3 className="text-lg md:text-xl font-bold text-gray-100 leading-snug">
+            <h3 className="text-lg md:text-xl font-bold leading-snug" style={{ color: '#ff9b9b' }}>
               {website.companyName}
             </h3>
-            <p className="text-xs md:text-sm font-medium tracking-wide mt-0.5" style={{ color: '#3a542d' }}>
+            <h4 className="text-sm md:text-base font-medium tracking-wide mt-0.5" style={{ color: '#b1df92' }}>
               {website.websiteName}
-            </p>
+            </h4>
           </div>
         ) : (
           <h3 className="text-base md:text-lg font-medium leading-snug mb-2" style={{ color: '#b1df92' }}>
