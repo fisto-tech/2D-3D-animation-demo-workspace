@@ -15,6 +15,7 @@ const Home = () => {
   const [activeTab, setActiveTab] = useState('2D');
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [selectedVideo, setSelectedVideo] = useState(null);
+  const [selectedTitle, setSelectedTitle] = useState('');
   const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
 
   // 2D tab state
@@ -313,8 +314,9 @@ const Home = () => {
             key={activeTab}
             websites={activeTab === '2D' ? filteredDemoWebsites : filteredActiveWebsites}
             sortBy={sortBy}
-            onPlayVideo={(url) => {
+            onPlayVideo={(url, title) => {
               setSelectedVideo(url);
+              setSelectedTitle(title);
               setIsVideoModalOpen(true);
             }}
           />
@@ -334,6 +336,7 @@ const Home = () => {
         isOpen={isVideoModalOpen}
         onClose={() => setIsVideoModalOpen(false)}
         videoUrl={selectedVideo}
+        title={selectedTitle}
       />
     </motion.div>
   );

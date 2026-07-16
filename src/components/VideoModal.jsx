@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FiX } from 'react-icons/fi';
 
-const VideoModal = ({ isOpen, onClose, videoUrl }) => {
+const VideoModal = ({ isOpen, onClose, videoUrl, title }) => {
   const isGoogleDrive = videoUrl?.includes('drive.google.com');
   let embedUrl = videoUrl;
   
@@ -55,10 +55,11 @@ const VideoModal = ({ isOpen, onClose, videoUrl }) => {
             className="relative w-[90%] max-w-7xl h-[90vh] bg-white border border-gray-200/50 rounded-2xl overflow-hidden shadow-2xl flex flex-col"
           >
             {/* Header */}
-            <div className="flex justify-end items-center p-4 bg-white border-b border-gray-200">
+            <div className="relative flex justify-center items-center p-4 bg-white border-b border-gray-200">
+              <h2 className="text-xl font-bold text-gray-900">{title || 'Fist-O'}</h2>
               <button
                 onClick={onClose}
-                className="p-2 bg-white/5 hover:bg-white/10 text-gray-900 rounded-full transition-colors group"
+                className="absolute right-4 p-2 bg-white/5 hover:bg-white/10 text-gray-900 rounded-full transition-colors group"
                 title="Close"
               >
                 <FiX size={20} className="group-hover:text-primary transition-colors" />

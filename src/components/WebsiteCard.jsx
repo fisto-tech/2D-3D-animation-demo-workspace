@@ -75,7 +75,7 @@ const WebsiteCard = ({ website, onEditClick, onPlayVideo }) => {
             e.stopPropagation();
             const videoToPlay = website.preview_video || website.websiteUrl;
             if (videoToPlay && onPlayVideo) {
-              onPlayVideo(videoToPlay);
+              onPlayVideo(videoToPlay, website.companyName || website.websiteName);
             }
           }}
         >
