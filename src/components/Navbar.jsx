@@ -82,28 +82,8 @@ const Navbar = () => {
             </nav>
           </div>
 
-          {/* Right Side */}
+          {/* Right Side - Removed as it moved to Hero */}
           <div className="flex items-center space-x-2 md:space-x-4">
-            {isAdmin ? (
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                onClick={handleLogout}
-                className="flex items-center px-3 py-1.5 md:px-5 md:py-2 text-[10px] md:text-xs tracking-widest uppercase font-bold text-white bg-primary hover:bg-primary-dark rounded-full transition-colors shadow-sm shadow-primary/30"
-              >
-                <FiLogOut className="mr-1 md:mr-2" />
-                Logout
-              </motion.button>
-            ) : (
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                onClick={() => navigate('/login')}
-                className="px-4 py-2 md:px-6 md:py-2.5 text-[10px] md:text-xs tracking-widest uppercase font-bold text-primary border border-primary/30 hover:border-primary hover:bg-primary/5 rounded-full transition-colors"
-              >
-                Admin Login
-              </motion.button>
-            )}
           </div>
         </div>
       </div>
