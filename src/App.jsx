@@ -74,7 +74,7 @@ function App() {
         <HashRouter>
           {!isLoaded && <Preloader onComplete={() => setIsLoaded(true)} />}
           <div className="flex flex-col min-h-screen bg-background relative">
-            <Navbar />
+            {/* <Navbar /> */}
             <div className="flex-grow">
               <AppRoutes />
             </div>
