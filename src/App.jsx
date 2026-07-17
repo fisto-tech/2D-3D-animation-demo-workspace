@@ -66,13 +66,25 @@ const BackToTop = () => {
 };
 
 function App() {
-  const [isLoaded, setIsLoaded] = React.useState(false);
+  const [isLoaded, setIsLoaded] = React.useState(() => {
+    if (typeof window !== 'undefined') {
+      return window.localStorage.getItem('fisto-preloader-complete') === 'true';
+    }
+    return false;
+  });
+
+  const handlePreloaderComplete = () => {
+    setIsLoaded(true);
+    if (typeof window !== 'undefined') {
+      window.localStorage.setItem('fisto-preloader-complete', 'true');
+    }
+  };
 
   return (
     <AuthProvider>
       <WebsiteProvider>
         <HashRouter>
-          {!isLoaded && <Preloader onComplete={() => setIsLoaded(true)} />}
+          {!isLoaded && <Preloader onComplete={handlePreloaderComplete} />}
           <div className="flex flex-col min-h-screen bg-background relative">
             {/* <Navbar /> */}
             <div className="flex-grow">

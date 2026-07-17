@@ -6,27 +6,83 @@ const Preloader = ({ onComplete }) => {
 
   useEffect(() => {
     let currentProgress = 0;
-    
-    // Simulate a realistic loading progression
-    const timer = setInterval(() => {
-      // Slow down as it gets closer to 100% to simulate real loading
-      const increment = currentProgress > 80 ? Math.random() * 2 : Math.random() * 15;
-      currentProgress = Math.min(currentProgress + increment, 100);
-      
-      setProgress(Math.floor(currentProgress));
+    let isComplete = false;
+    let fadeTimer = null;
+    let finishTimer = null;
 
-      if (currentProgress >= 100) {
-        clearInterval(timer);
-        // Start fade out animation
-        setTimeout(() => {
-          setIsFadingOut(true);
-          // Tell parent component we're done after fade out completes
-          setTimeout(onComplete, 800); 
-        }, 400);
+    const finishLoading = () => {
+      if (isComplete) return;
+      isComplete = true;
+
+      clearInterval(progressTimer);
+      clearTimeout(fadeTimer);
+      clearTimeout(finishTimer);
+
+      setProgress(100);
+      setIsFadingOut(true);
+      fadeTimer = setTimeout(() => {
+        finishTimer = setTimeout(onComplete, 400);
+      }, 400);
+    };
+
+    const observeMedia = () => {
+      const assets = Array.from(document.querySelectorAll('img, video, source'));
+      if (!assets.length) {
+        finishLoading();
+        return;
       }
-    }, 100);
 
-    return () => clearInterval(timer);
+      let loadedCount = 0;
+      const totalCount = assets.length;
+
+      const markAsset = () => {
+        loadedCount += 1;
+        if (loadedCount >= totalCount) {
+          finishLoading();
+        }
+      };
+
+      assets.forEach((asset) => {
+        if (asset.complete) {
+          markAsset();
+          return;
+        }
+
+        asset.addEventListener('load', markAsset, { once: true });
+        asset.addEventListener('error', markAsset, { once: true });
+      });
+    };
+
+    const progressTimer = setInterval(() => {
+      const increment = currentProgress > 80 ? Math.random() * 2 : Math.random() * 12;
+      currentProgress = Math.min(currentProgress + increment, 94);
+      setProgress(Math.floor(currentProgress));
+    }, 120);
+
+    observeMedia();
+
+    const handleWindowLoad = () => finishLoading();
+    const handleFontsReady = () => finishLoading();
+
+    if (document.fonts?.ready) {
+      document.fonts.ready.then(handleFontsReady).catch(handleFontsReady);
+    }
+
+    window.addEventListener('load', handleWindowLoad);
+
+    const observer = new MutationObserver(() => {
+      observeMedia();
+    });
+
+    observer.observe(document.body, { childList: true, subtree: true });
+
+    return () => {
+      clearInterval(progressTimer);
+      clearTimeout(fadeTimer);
+      clearTimeout(finishTimer);
+      window.removeEventListener('load', handleWindowLoad);
+      observer.disconnect();
+    };
   }, [onComplete]);
 
   return (
