@@ -143,7 +143,7 @@ const Home = () => {
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -6 }}
                     transition={{ duration: 0.2 }}
-                    className="flex flex-wrap gap-3 items-center justify-end flex-1 min-w-[200px]"
+                    className="flex flex-wrap gap-3 items-center justify-end w-full md:flex-nowrap md:justify-end md:min-w-0"
                   >
                     {/* Category Dropdown */}
                     <div className="relative w-full sm:w-auto shrink-0">
@@ -165,7 +165,7 @@ const Home = () => {
                     </div>
                     
                     {/* Demo Search */}
-                    <div className="relative w-full sm:w-auto sm:flex-1 min-w-[150px] max-w-sm">
+                    <div className="relative w-full sm:flex-1 min-w-[180px] max-w-full md:max-w-[240px]">
                       <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none z-10">
                         <FiSearch className="text-white/70" size={17} />
                       </div>
@@ -226,7 +226,7 @@ const Home = () => {
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -6 }}
                     transition={{ duration: 0.2 }}
-                    className="flex flex-wrap gap-3 items-center justify-end flex-1 min-w-[200px]"
+                    className="flex flex-wrap gap-3 items-center justify-end w-full md:flex-nowrap md:justify-end md:min-w-0"
                   >
                     {/* Active Category Dropdown */}
                     <div className="relative w-full sm:w-auto shrink-0">
@@ -248,7 +248,7 @@ const Home = () => {
                     </div>
 
                     {/* Active Search */}
-                    <div className="relative w-full sm:w-auto sm:flex-1 min-w-[150px] max-w-sm">
+                    <div className="relative w-full sm:flex-1 min-w-[180px] max-w-full md:max-w-[240px]">
                       <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none z-10">
                         <FiSearch className="text-white/70" size={17} />
                       </div>
