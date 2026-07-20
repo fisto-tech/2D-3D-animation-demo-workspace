@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
+import ReactDOM from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FiX, FiPlus, FiLoader } from 'react-icons/fi';
 import { WebsiteContext } from '../context/WebsiteContext';
@@ -43,8 +44,6 @@ const AddModal = ({ isOpen, onClose, defaultType = '2D' }) => {
     return () => { document.body.style.overflow = 'unset'; };
   }, [isOpen]);
 
-  if (!isOpen) return null;
-
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
@@ -83,14 +82,22 @@ const AddModal = ({ isOpen, onClose, defaultType = '2D' }) => {
     }
   };
 
-  return (
+  // We must return the Portal even if not open, and conditionally render inside AnimatePresence 
+  // so the exit animation can trigger before it unmounts.
+  return ReactDOM.createPortal(
     <AnimatePresence>
-      <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4">
-        <motion.div
-          initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-          className="absolute inset-0 bg-black/80 backdrop-blur-sm"
-          onClick={onClose}
-        />
+      {isOpen && (
+        <motion.div 
+          key="add-modal-overlay"
+          initial={{ opacity: 0 }} 
+          animate={{ opacity: 1 }} 
+          exit={{ opacity: 0 }}
+          className="fixed inset-0 z-[999999] flex items-center justify-center p-4"
+        >
+          <div
+            className="absolute inset-0 bg-black/80 backdrop-blur-sm"
+            onClick={onClose}
+          />
         <motion.div
           initial={{ opacity: 0, scale: 0.95, y: 20 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -255,8 +262,10 @@ const AddModal = ({ isOpen, onClose, defaultType = '2D' }) => {
             </button>
           </div>
         </motion.div>
-      </div>
-    </AnimatePresence>
+        </motion.div>
+      )}
+    </AnimatePresence>,
+    document.body
   );
 };
 

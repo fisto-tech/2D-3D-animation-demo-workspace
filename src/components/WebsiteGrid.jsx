@@ -54,7 +54,7 @@ const SortableWebsiteCard = ({ website, onEditClick, onPlayVideo }) => {
   );
 };
 
-const WebsiteGrid = ({ websites, onEditClick, sortBy, onPlayVideo }) => {
+const WebsiteGrid = ({ websites, onEditClick, sortBy, isRearrangeMode, onPlayVideo }) => {
   const { isAdmin } = useContext(AuthContext);
   const { updateWebsiteOrder } = useContext(WebsiteContext);
   const [items, setItems] = useState(websites);
@@ -141,8 +141,8 @@ const WebsiteGrid = ({ websites, onEditClick, sortBy, onPlayVideo }) => {
     );
   }
 
-  // If normal grid and Admin, enable Drag & Drop
-  if (isAdmin) {
+  // If normal grid and Admin and isRearrangeMode, enable Drag & Drop
+  if (isAdmin && isRearrangeMode) {
     return (
       <DndContext 
         sensors={sensors}

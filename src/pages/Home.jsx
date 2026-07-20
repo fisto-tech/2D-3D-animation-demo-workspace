@@ -6,7 +6,7 @@ import WebsiteGrid from '../components/WebsiteGrid';
 import AddModal from '../components/AddModal';
 import VideoModal from '../components/VideoModal';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FiSearch, FiX, FiChevronDown, FiPlus } from 'react-icons/fi';
+import { FiSearch, FiX, FiChevronDown, FiPlus, FiMove } from 'react-icons/fi';
 
 const Home = () => {
   const { websites, addWebsite } = useContext(WebsiteContext);
@@ -17,6 +17,7 @@ const Home = () => {
   const [selectedVideo, setSelectedVideo] = useState(null);
   const [selectedTitle, setSelectedTitle] = useState('');
   const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
+  const [isRearrangeMode, setIsRearrangeMode] = useState(false);
 
   // 2D tab state
   const [demoSearch, setDemoSearch] = useState('');
@@ -206,18 +207,30 @@ const Home = () => {
                       </div>
                     </div>
 
-                    {/* + Add Button — admin only */}
+                    {/* + Add & Rearrange Buttons — admin only */}
                     {isAdmin && (
-                      <motion.button
-                        id="add-website-btn"
-                        whileHover={{ scale: 1.05 }}
-                        whileTap={{ scale: 0.95 }}
-                        onClick={() => setIsAddModalOpen(true)}
-                        className="shrink-0 flex items-center justify-center gap-1.5 px-5 py-2.5 bg-primary hover:bg-primary-dark text-white text-xs font-bold tracking-widest uppercase rounded-full transition-colors shadow-[0_0_15px_rgba(197,160,89,0.25)] w-full sm:w-auto"
-                      >
-                        <FiPlus size={14} />
-                        Add
-                      </motion.button>
+                      <div className="flex gap-2 w-full sm:w-auto">
+                        <motion.button
+                          whileHover={{ scale: 1.05 }}
+                          whileTap={{ scale: 0.95 }}
+                          onClick={() => setIsRearrangeMode(!isRearrangeMode)}
+                          title={isRearrangeMode ? "Disable Rearrange" : "Enable Rearrange"}
+                          className={`shrink-0 flex items-center justify-center p-2.5 rounded-full transition-colors border ${isRearrangeMode ? 'bg-indigo-600 border-indigo-500 text-white shadow-[0_0_15px_rgba(79,70,229,0.4)]' : 'border-border/50 text-textSecondary hover:text-white'}`}
+                        >
+                          <FiMove size={16} />
+                        </motion.button>
+
+                        <motion.button
+                          id="add-website-btn"
+                          whileHover={{ scale: 1.05 }}
+                          whileTap={{ scale: 0.95 }}
+                          onClick={() => setIsAddModalOpen(true)}
+                          className="shrink-0 flex items-center justify-center gap-1.5 px-5 py-2.5 bg-primary hover:bg-primary-dark text-white text-xs font-bold tracking-widest uppercase rounded-full transition-colors shadow-[0_0_15px_rgba(197,160,89,0.25)] w-full sm:w-auto"
+                        >
+                          <FiPlus size={14} />
+                          Add
+                        </motion.button>
+                      </div>
                     )}
                   </motion.div>
                 ) : (
@@ -289,18 +302,30 @@ const Home = () => {
                       </div>
                     </div>
 
-                    {/* + Add Button — admin only */}
+                    {/* + Add & Rearrange Buttons — admin only */}
                     {isAdmin && (
-                      <motion.button
-                        id="add-website-btn"
-                        whileHover={{ scale: 1.05 }}
-                        whileTap={{ scale: 0.95 }}
-                        onClick={() => setIsAddModalOpen(true)}
-                        className="shrink-0 flex items-center justify-center gap-1.5 px-5 py-2.5 bg-primary hover:bg-primary-dark text-white text-xs font-bold tracking-widest uppercase rounded-full transition-colors shadow-[0_0_15px_rgba(197,160,89,0.25)] w-full sm:w-auto"
-                      >
-                        <FiPlus size={14} />
-                        Add
-                      </motion.button>
+                      <div className="flex gap-2 w-full sm:w-auto">
+                        <motion.button
+                          whileHover={{ scale: 1.05 }}
+                          whileTap={{ scale: 0.95 }}
+                          onClick={() => setIsRearrangeMode(!isRearrangeMode)}
+                          title={isRearrangeMode ? "Disable Rearrange" : "Enable Rearrange"}
+                          className={`shrink-0 flex items-center justify-center p-2.5 rounded-full transition-colors border ${isRearrangeMode ? 'bg-indigo-600 border-indigo-500 text-white shadow-[0_0_15px_rgba(79,70,229,0.4)]' : 'border-border/50 text-textSecondary hover:text-white'}`}
+                        >
+                          <FiMove size={16} />
+                        </motion.button>
+
+                        <motion.button
+                          id="add-website-btn"
+                          whileHover={{ scale: 1.05 }}
+                          whileTap={{ scale: 0.95 }}
+                          onClick={() => setIsAddModalOpen(true)}
+                          className="shrink-0 flex items-center justify-center gap-1.5 px-5 py-2.5 bg-primary hover:bg-primary-dark text-white text-xs font-bold tracking-widest uppercase rounded-full transition-colors shadow-[0_0_15px_rgba(197,160,89,0.25)] w-full sm:w-auto"
+                        >
+                          <FiPlus size={14} />
+                          Add
+                        </motion.button>
+                      </div>
                     )}
                   </motion.div>
                 )}
@@ -317,6 +342,7 @@ const Home = () => {
             key={activeTab}
             websites={activeTab === '2D' ? filteredDemoWebsites : filteredActiveWebsites}
             sortBy={sortBy}
+            isRearrangeMode={isRearrangeMode}
             onPlayVideo={(url, title) => {
               setSelectedVideo(url);
               setSelectedTitle(title);
