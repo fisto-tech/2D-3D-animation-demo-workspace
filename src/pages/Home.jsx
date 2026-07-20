@@ -215,7 +215,7 @@ const Home = () => {
                           whileTap={{ scale: 0.95 }}
                           onClick={() => setIsRearrangeMode(!isRearrangeMode)}
                           title={isRearrangeMode ? "Disable Rearrange" : "Enable Rearrange"}
-                          className={`shrink-0 flex items-center justify-center p-2.5 rounded-full transition-colors border ${isRearrangeMode ? 'bg-indigo-600 border-indigo-500 text-white shadow-[0_0_15px_rgba(79,70,229,0.4)]' : 'border-border/50 text-textSecondary hover:text-white'}`}
+                          className={`hidden lg:flex shrink-0 items-center justify-center p-2.5 rounded-full transition-colors border ${isRearrangeMode ? 'bg-indigo-600 border-indigo-500 text-white shadow-[0_0_15px_rgba(79,70,229,0.4)]' : 'border-border/50 text-textSecondary hover:text-white'}`}
                         >
                           <FiMove size={16} />
                         </motion.button>
@@ -310,7 +310,7 @@ const Home = () => {
                           whileTap={{ scale: 0.95 }}
                           onClick={() => setIsRearrangeMode(!isRearrangeMode)}
                           title={isRearrangeMode ? "Disable Rearrange" : "Enable Rearrange"}
-                          className={`shrink-0 flex items-center justify-center p-2.5 rounded-full transition-colors border ${isRearrangeMode ? 'bg-indigo-600 border-indigo-500 text-white shadow-[0_0_15px_rgba(79,70,229,0.4)]' : 'border-border/50 text-textSecondary hover:text-white'}`}
+                          className={`hidden lg:flex shrink-0 items-center justify-center p-2.5 rounded-full transition-colors border ${isRearrangeMode ? 'bg-indigo-600 border-indigo-500 text-white shadow-[0_0_15px_rgba(79,70,229,0.4)]' : 'border-border/50 text-textSecondary hover:text-white'}`}
                         >
                           <FiMove size={16} />
                         </motion.button>
