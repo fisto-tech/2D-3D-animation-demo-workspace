@@ -11,10 +11,45 @@ const Hero = () => {
   const [mousePos, setMousePos] = useState({ x: 15, y: 50 });
   const { isAdmin, logout } = useContext(AuthContext);
   const navigate = useNavigate();
-  const heroRef = useRef(null);
+  const heroSectionRef = useRef(null);
 
   useEffect(() => {
     gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
+
+    let isAnimating = false;
+
+    const handleWheel = (e) => {
+      // If we are near the top and scrolling down
+      if (window.scrollY < 50 && e.deltaY > 0 && !isAnimating) {
+        e.preventDefault();
+        isAnimating = true;
+        
+        const section = document.getElementById('marketplace-grid');
+        if (section) {
+          // Calculate target with a small offset for the sticky header if needed, or exact top
+          const targetY = section.getBoundingClientRect().top + window.scrollY;
+          
+          gsap.to(window, {
+            duration: 1.2,
+            ease: 'power3.inOut',
+            scrollTo: { y: targetY, autoKill: false },
+            onComplete: () => {
+              setTimeout(() => { isAnimating = false; }, 100);
+            }
+          });
+        } else {
+          isAnimating = false;
+        }
+      } else if (isAnimating) {
+        e.preventDefault(); // Block scrolling while animating
+      }
+    };
+
+    window.addEventListener('wheel', handleWheel, { passive: false });
+
+    return () => {
+      window.removeEventListener('wheel', handleWheel);
+    };
   }, []);
 
   const handleLogout = () => {
@@ -34,19 +69,19 @@ const Hero = () => {
     const section = document.getElementById('marketplace-grid');
     if (!section) return;
 
-    const targetY = section.getBoundingClientRect().top + window.scrollY - 24;
+    const targetY = section.getBoundingClientRect().top + window.scrollY - 80;
 
     gsap.to(window, {
-      duration: 1.2,
+      duration: 1.25,
       ease: 'power3.inOut',
       scrollTo: { y: targetY, autoKill: false }
     });
   };
 
   return (
-    <div ref={heroRef} className="relative">
+    <div ref={heroSectionRef} className="relative">
       <div 
-        className="relative overflow-hidden border-b border-border"
+        className="relative overflow-hidden border-b border-border py-12 lg:py-20"
         onMouseMove={handleMouseMove}
         style={{
           '--mouse-x': `${mousePos.x}%`,
