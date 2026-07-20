@@ -95,7 +95,7 @@ const AddModal = ({ isOpen, onClose, defaultType = '2D' }) => {
           initial={{ opacity: 0, scale: 0.95, y: 20 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.95, y: 20 }}
-          className="relative bg-white border border-gray-200 rounded-xl shadow-2xl w-[90%] max-w-2xl max-h-[90vh] overflow-hidden flex flex-col"
+          className="relative bg-white border border-gray-200 rounded-xl shadow-2xl w-[90%] max-w-2xl max-h-[90vh] overflow-hidden flex flex-col z-[111]"
         >
           <div className="absolute inset-0 bg-mesh-pattern opacity-10 pointer-events-none"></div>
 
