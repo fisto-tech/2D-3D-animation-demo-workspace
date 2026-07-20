@@ -12,7 +12,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 
 include 'db.php';
 
-$query = "SELECT * FROM animations ORDER BY created_at DESC";
+$query = "SELECT * FROM animations ORDER BY display_order ASC, created_at DESC";
 $result = $conn->query($query);
 
 $animations = [];

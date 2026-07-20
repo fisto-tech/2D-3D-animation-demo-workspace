@@ -145,6 +145,36 @@ export const WebsiteProvider = ({ children }) => {
     }
   };
 
+  // ── Update Order ──────────────────────────────────────────────────────────
+  const updateWebsiteOrder = async (orderedItems) => {
+    // Optimistic update locally
+    setWebsites(current => {
+      const newOrderIds = orderedItems.map(item => item.id);
+      const orderedWebsites = newOrderIds.map(id => current.find(w => w.websiteId === id)).filter(Boolean);
+      const remainingWebsites = current.filter(w => !newOrderIds.includes(w.websiteId));
+      return [...orderedWebsites, ...remainingWebsites];
+    });
+
+    try {
+      const res = await fetch(`${API_BASE}/update_animation_order.php`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(orderedItems),
+      });
+      const json = await res.json();
+      if (!json.success) {
+        // Revert on error by refetching
+        await fetchWebsites();
+      }
+      return json;
+    } catch (e) {
+      await fetchWebsites();
+      return { success: false, message: 'Network error.' };
+    }
+  };
+
   return (
     <WebsiteContext.Provider value={{
       websites,
@@ -153,6 +183,7 @@ export const WebsiteProvider = ({ children }) => {
       addWebsite,
       editWebsite,
       deleteWebsite,
+      updateWebsiteOrder,
       refreshWebsites: fetchWebsites,
     }}>
       {children}
