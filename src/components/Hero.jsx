@@ -81,7 +81,7 @@ const Hero = () => {
   return (
     <div ref={heroSectionRef} className="relative">
       <div 
-        className="relative overflow-hidden border-b border-border py-6 lg:py-8"
+        className="relative overflow-hidden border-b border-border py-2 lg:py-4"
         onMouseMove={handleMouseMove}
         style={{
           '--mouse-x': `${mousePos.x}%`,
