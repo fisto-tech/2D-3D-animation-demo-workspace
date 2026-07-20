@@ -1,13 +1,21 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
 import { FiLogOut } from 'react-icons/fi';
+import gsap from 'gsap';
+import ScrollTrigger from 'gsap/ScrollTrigger';
+import { ScrollToPlugin } from 'gsap/ScrollToPlugin';
 
 const Hero = () => {
   const [mousePos, setMousePos] = useState({ x: 15, y: 50 });
   const { isAdmin, logout } = useContext(AuthContext);
   const navigate = useNavigate();
+  const heroRef = useRef(null);
+
+  useEffect(() => {
+    gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
+  }, []);
 
   const handleLogout = () => {
     logout();
@@ -22,15 +30,29 @@ const Hero = () => {
     setMousePos({ x, y });
   };
 
+  const handleExploreDemos = () => {
+    const section = document.getElementById('marketplace-grid');
+    if (!section) return;
+
+    const targetY = section.getBoundingClientRect().top + window.scrollY - 24;
+
+    gsap.to(window, {
+      duration: 1.2,
+      ease: 'power3.inOut',
+      scrollTo: { y: targetY, autoKill: false }
+    });
+  };
+
   return (
-    <div 
-      className="relative overflow-hidden border-b border-border"
-      onMouseMove={handleMouseMove}
-      style={{
-        '--mouse-x': `${mousePos.x}%`,
-        '--mouse-y': `${mousePos.y}%`
-      }}
-    >
+    <div ref={heroRef} className="relative">
+      <div 
+        className="relative overflow-hidden border-b border-border"
+        onMouseMove={handleMouseMove}
+        style={{
+          '--mouse-x': `${mousePos.x}%`,
+          '--mouse-y': `${mousePos.y}%`
+        }}
+      >
       {/* Admin Login / Logout Button - Top Right */}
       <div className="absolute top-4 right-4 md:top-6 md:right-6 z-20">
         {isAdmin ? (
@@ -88,6 +110,7 @@ const Hero = () => {
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
+              onClick={handleExploreDemos}
               className="px-8 py-3 md:px-10 md:py-3.5 text-xs md:text-sm tracking-widest uppercase font-bold text-gray-900 bg-[#a6da9f] hover:bg-[#7db376] rounded-full transition-all shadow-lg"
             >
               Explore Demos
@@ -96,6 +119,7 @@ const Hero = () => {
           </motion.div>
 
         </div>
+      </div>
       </div>
     </div>
   );

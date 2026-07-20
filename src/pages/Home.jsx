@@ -1,4 +1,4 @@
-import React, { useContext, useState, useMemo } from 'react';
+import React, { useContext, useState, useMemo, useRef, useEffect } from 'react';
 import { WebsiteContext } from '../context/WebsiteContext';
 import { AuthContext } from '../context/AuthContext';
 import Hero from '../components/Hero';
@@ -7,10 +7,13 @@ import AddModal from '../components/AddModal';
 import VideoModal from '../components/VideoModal';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FiSearch, FiX, FiChevronDown, FiPlus } from 'react-icons/fi';
+import gsap from 'gsap';
+import ScrollTrigger from 'gsap/ScrollTrigger';
 
 const Home = () => {
   const { websites, addWebsite } = useContext(WebsiteContext);
   const { isAdmin } = useContext(AuthContext);
+  const pinSectionRef = useRef(null);
   
   const [activeTab, setActiveTab] = useState('2D');
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
@@ -25,6 +28,28 @@ const Home = () => {
   // 3D tab state
   const [activeSearch, setActiveSearch] = useState('');
   const [activeCategory, setActiveCategory] = useState('');
+
+  // Pin the marketplace section for one scroll span, then release smoothly.
+  useEffect(() => {
+    gsap.registerPlugin(ScrollTrigger);
+
+    if (!pinSectionRef.current) return undefined;
+
+    const pinTrigger = ScrollTrigger.create({
+      trigger: pinSectionRef.current,
+      start: 'top top',
+      end: '+=110%',
+      pin: true,
+      pinSpacing: true,
+      scrub: false,
+      markers: false
+    });
+
+    return () => {
+      pinTrigger.kill();
+      ScrollTrigger.getAll().forEach(trigger => trigger.kill());
+    };
+  }, []);
 
   const demoWebsites = useMemo(() => websites.filter(w => w.projectType === '2D' || w.projectType === 'demo'), [websites]);
   const activeWebsites = useMemo(() => websites.filter(w => w.projectType === '3D' || w.projectType === 'active'), [websites]);
@@ -104,7 +129,8 @@ const Home = () => {
       <Hero />
 
       <main id="marketplace-grid" className="flex-1 w-full bg-[#0a0a0a]">
-        <div className="w-[95%] md:w-[85%] max-w-none mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
+        <div ref={pinSectionRef} className="relative min-h-screen">
+          <div className="w-[95%] md:w-[85%] max-w-none mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
         {/* Header Row */}
         <div className="mb-8 md:mb-10">
           <div className="flex flex-col gap-5 md:flex-row md:items-center md:justify-between">
@@ -321,6 +347,7 @@ const Home = () => {
             }}
           />
         </AnimatePresence>
+          </div>
         </div>
       </main>
 
